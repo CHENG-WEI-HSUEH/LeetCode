@@ -1,0 +1,127 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+#define toDigit(c) (c-'0')
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        queue<TreeNode*> Q;
+        Q.push(root);
+        string Ans;
+        
+        if(root == NULL)
+            return Ans;
+        
+        while(!Q.empty())
+        {
+            int len = Q.size();
+            Ans += "[";
+            
+            for(int i=0; i<len; i++)
+            {
+                if(Q.front() == NULL)
+                {
+                    Ans += "#,";
+                    Q.pop(); 
+                    continue;
+                }
+                
+                TreeNode* Temp = Q.front();
+                Q.pop();
+                
+                Ans += to_string(Temp->val);            
+                Q.push(Temp->left);
+                Ans += ",";
+                Q.push(Temp->right);       
+            }
+            
+            Ans += "]";
+        }
+        printf("s = %s\n", Ans.c_str());
+        return Ans;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        if(data.empty())
+            return nullptr;
+
+
+        queue<TreeNode*> Q;
+        queue<TreeNode*> Q_Last;
+        string temp_data;
+        bool first = true, left = true;
+        TreeNode* Ans = new TreeNode();
+        TreeNode*  Temp;
+        int len = data.size();
+
+        Q.push(Ans);
+        
+        for(char c: data)
+        { 
+            if(c == '[')
+                continue;
+            //Next element
+            else if(c == ',')
+            {
+                if(first)
+                {
+
+                    Ans->val = stoi(temp_data);
+                    printf("root: %d\n", Ans->val);
+                    first = false;
+                    temp_data.clear();
+                    Q.push(Ans);                    
+                }
+                else
+                {
+                    Temp = Q_Last.front();
+                    if(left)
+                    {
+                        if(temp_data.compare("#") != 0)
+                        {
+                            Temp->left = new TreeNode(stoi(temp_data));
+                            printf("l: %d->%d\n", Temp->val, Temp->left->val);
+                            Q.push(Temp->left);
+                        }
+
+                        temp_data.clear();
+                        left = false;
+                    }
+                    else
+                    {
+                        if(temp_data.compare("#") != 0)
+                        {
+                            
+                            Temp->right = new TreeNode(stoi(temp_data));
+                            printf("r: %d->%d\n", Temp->val, Temp->right->val);
+                            Q.push(Temp->right);
+                        }
+
+                        temp_data.clear();
+                        Q_Last.pop();
+                        left = true;
+                    }
+                }
+            }
+            //Next line
+            else if(c == ']')
+            {
+                Q_Last = Q;
+                Q = queue<TreeNode*>();
+            }
+            else
+                temp_data += c;
+        }
+
+        return Ans;
+    }
+};
