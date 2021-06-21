@@ -1,0 +1,52 @@
+class Solution {
+public:
+    int heightChecker(vector<int>& heights) {
+        int ans = 0;
+        int val = 0;
+        unordered_map<int,int> mymap;
+        vector<int> uni_key;
+        
+        //Initial
+        for(int i: heights)
+        {
+            if(mymap.find(i) == mymap.end())
+            {
+                mymap[i] = 1;
+                uni_key.push_back(i);
+            }
+            else
+                mymap[i]++;
+        }
+        
+        //Realingment - bulbble sort
+        for(int i = uni_key.size()-1; i >= 0 ; i--)
+        {
+            for(int j = 0; j < i; j++)
+                if(uni_key[j]<uni_key[j+1])
+                    swap(uni_key[j],uni_key[j+1]);
+        }
+    
+        
+        //Check        
+        val = uni_key.back();
+        for(int i = 0; i < heights.size() ; i++)
+        {
+            if(val != heights[i])
+                ans++;
+            
+            mymap[val]--;
+            printf("height: %d, val: %d\n", heights[i], val);
+            if(mymap[val] <= 0)
+            {
+                uni_key.pop_back();
+                
+                if(!uni_key.empty())
+                    val = uni_key.back();
+                else
+                    break;
+            }
+        }
+        
+        return ans;
+    }
+};
