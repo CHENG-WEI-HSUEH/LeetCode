@@ -1,0 +1,29 @@
+#define square(x)    x*x
+
+class Solution {
+public:
+    vector<int> sortedSquares(vector<int>& nums) {
+        vector<int> ans;
+        int neg_index = 0;
+        int pos_index = nums.size() - 1;
+        for(int i = 0; i < nums.size(); i++)
+        {
+            if(square(nums[neg_index]) > square(nums[pos_index]))
+            {
+                ans.push_back(square(nums[neg_index]));
+                neg_index++;
+            }
+            else
+            {
+                ans.push_back(square(nums[pos_index]));
+                pos_index--;
+            }
+            
+        }
+        
+        for(int i = 0; i < nums.size(); i++)
+            nums.at(nums.size() - (i+1)) = ans[i];
+        
+        return nums;
+    }
+};

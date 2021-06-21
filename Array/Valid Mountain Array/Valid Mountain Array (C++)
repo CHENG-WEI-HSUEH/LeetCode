@@ -1,0 +1,32 @@
+class Solution {
+public:
+    bool validMountainArray(vector<int>& arr) {
+        if(arr.empty())
+            return false;
+        
+        int pos_index = 0;
+        int neg_index = arr.size() - 1;
+        
+        for(int i = 1; i < arr.size(); i++)
+        {
+            if(arr[i]<arr[pos_index])
+                break;
+            else if(arr[i]==arr[pos_index])
+                return false;
+            
+            pos_index++;
+        }
+
+        for(int i = arr.size()-2; i > pos_index-1; i--)
+        {
+            if(arr[i]<arr[neg_index])
+                break;
+            else if(arr[i]==arr[neg_index])
+                return false;
+            
+            neg_index--;
+        }  
+        
+        return (pos_index == neg_index) && (pos_index > 0) && (neg_index < arr.size() - 1);
+    }
+};
