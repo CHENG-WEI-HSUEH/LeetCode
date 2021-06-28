@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int checker=0;
+        vector<int> lookup(256,0);
+        int ans=0;
+        for(int i=0;i<s.size();){
+            if(lookup[s[i]]==0){
+                ans=max(ans,(i-checker)+1);
+                lookup[s[i]]++;
+                i++;
+            }
+            else{
+                lookup[s[checker]]--;
+                checker++;
+            }
+        }
+        return ans;
+    }
+};
