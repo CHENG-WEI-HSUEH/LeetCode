@@ -1,0 +1,40 @@
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        vector<int> temp;
+		
+        //Merge
+		while(!nums1.empty() || !nums2.empty())
+		{
+            if(!nums1.empty() && !nums2.empty())
+            {
+                if(nums2.back() > nums1.back())
+                {
+                    temp.push_back(nums2.back());
+                    nums2.pop_back();
+                }
+                else
+                {
+                    temp.push_back(nums1.back());
+                    nums1.pop_back();
+                }
+            }
+            else if(!nums1.empty())
+            {
+                temp.push_back(nums1.back());
+                nums1.pop_back();
+            }
+            else if(!nums2.empty())
+            {
+                temp.push_back(nums2.back());
+                nums2.pop_back();
+            }
+        }
+		
+        
+        if(temp.size()%2 != 0)
+            return (double) temp[(temp.size()/2)];
+        else
+            return (((double) temp[(temp.size()/2)] + (double) temp[(temp.size()/2)-1])/2);
+    }
+};
