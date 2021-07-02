@@ -1,0 +1,61 @@
+class Solution {
+private:
+    int Helper(string s,int left, int right,int* start)
+    {
+        if(left<0) left = 0;
+        if(right>=s.size()) right = s.size()-1;
+
+        while((0<=left) && (right<s.size()) && (s[left] == s[right]))
+        {
+            left--;
+            right++;
+        }
+
+        if(left<0) left = 0;
+        else    left++;
+
+        if(right>=s.size()) right = s.size()-1;
+        else right--;
+        
+        *start = left;
+        return (right-left+1);
+    }
+public:
+    string longestPalindrome(string s) {
+        unordered_map <char,int> mymap;
+        int len = 0;
+        int start = 0;
+        
+        if(s.size()<=1)
+            return s;
+        
+        for(int i = 0; i < s.size(); i++)
+        {
+            int len_1 = 0;
+            int start_1 = 0;
+            
+            int len_2 = 0;
+            int start_2 = 0;
+            
+            //Odd
+            len_1 = Helper(s,i-1,i+1,&start_1);
+            //Even
+            len_2 = Helper(s,i-1,i,&start_2);
+
+            //len_1 > len_2
+            if(len_1<len_2)
+            {
+                len_1 = len_2;
+                start_1 = start_2;
+            }
+            
+            if(len<len_1)
+            {
+                len = len_1;
+                start = start_1;
+            }
+        }
+        
+        return s.substr(start,len);
+    }
+};
