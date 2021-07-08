@@ -1,0 +1,41 @@
+/*
+new,old
+x = 0~4, n=5 inner
+y = 0~4 outer
+00,00                  01,08                    02,16    (2n-2)x+y x==0
+03,01            04,07 05,09              06,15 07,17    (2n-2)x+y; (2n-2)*(x+1)-y
+08,02       09,06      10,10        11,14       12,18		.
+13,03  14,05           15,11  16,13             17,19		.
+18,04		           19,12		            20,20    (2n-2)x+y
+*/
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        if(numRows == 1)
+            return s;
+        string result = s;
+        int index = 0;
+        for(int y = 0; y < numRows; y++) 
+        {
+            bool end = false;
+            for(int x = 0; !end; x++)
+            {
+                if(((2*numRows-2)*x+y) < (s.size()))
+                    result[index++] = s[(2*numRows-2)*x+y];
+                else
+                    end = true;
+                
+                if((y!=0) && (y!=(numRows-1)))  
+                {
+                    if((((2*numRows)-2)*(x+1)-y)<(s.size()))
+                        result[index++] = s[(((2*numRows)-2)*(x+1)-y)];   
+                    else
+                        end = true;
+                }
+
+            }
+        }
+        return result;
+    }
+};
+    
