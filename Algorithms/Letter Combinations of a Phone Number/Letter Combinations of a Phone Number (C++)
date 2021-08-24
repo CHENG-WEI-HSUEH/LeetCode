@@ -1,0 +1,50 @@
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        
+
+        
+        vector<vector<char>> keyboard = {{},{},{'a','b','c'},{'d','e','f'},{'g','h','i'},\
+                                         {'j','k','l'},{'m','n','o'},{'p','q','r','s'},\
+                                         {'t','u','v'},{'w','x','y','z'}};
+        int index = 0;
+        vector<string> ans;
+        
+        if(digits.empty())
+            return ans;        
+        
+        while(index<digits.size())
+        {
+            int temp_dig = digits[index] - 48;
+            if(temp_dig>1 && temp_dig<=9)
+            {
+                if(ans.empty())
+                {
+                    
+                    for(char c: keyboard[temp_dig])
+                    {
+
+                        string str;
+                        str += c;
+                        ans.push_back(str);
+                    }
+                }
+                else
+                {
+                    vector<string> temp;
+                    for(string str: ans)
+                    {
+                        for(char c: keyboard[temp_dig])
+                            temp.push_back(str + c);
+                    }
+
+                    ans = temp;
+                }
+            }
+            
+            index++;
+        }
+        
+        return ans;
+    }
+};
